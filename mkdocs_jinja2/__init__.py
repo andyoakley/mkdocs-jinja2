@@ -12,13 +12,16 @@ def filter_strftime(t, fmt):
 
 class JinjaEnvironment(BasePlugin):
 
-    def on_page_content(self, html, page, config, site_navigation):
+    def on_nav(self, nav, config, files):
+        self.nav = nav
+
+    def on_page_content(self, html, page, config, files):
         env = Environment()
         env.filters['strftime'] = filter_strftime
 
         return env.from_string(html).render(
                 config=config,
-                site_navigation=site_navigation,
-                pages=site_navigation.pages,
+                nav=self.nav,
+                files=files
                 )
 
