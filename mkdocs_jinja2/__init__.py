@@ -1,8 +1,11 @@
 __version__ = '0.1.0'
 
+import mkdocs.config
 from mkdocs.plugins import BasePlugin
 from jinja2 import Environment
 import datetime
+
+import mkdocs_jinja2.cleaner
 
 def filter_strftime(t, fmt):
     if type(t) is datetime.datetime:
@@ -19,7 +22,7 @@ class JinjaEnvironment(BasePlugin):
         env = Environment()
         env.filters['strftime'] = filter_strftime
 
-        return env.from_string(html).render(
+        return env.from_string(cleaner.clean(html)).render(
                 config=config,
                 nav=self.nav,
                 files=files
